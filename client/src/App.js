@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./style/dark.scss";
 import { useContext } from "react"
 import { DarkModeContext } from "./context/darkModeContext";
+import { Messenger } from "./pages/messenger/Messenger";
 function App() {
 
   const { darkMode } = useContext(DarkModeContext)
@@ -33,6 +34,9 @@ function App() {
                 path="new"
                 element={<New inputs={productInputs} title="Add New Product" />}
               />
+            </Route>
+            <Route path="messenger">
+              <Route index element={<Messenger />} />
             </Route>
           </Route>
         </Routes>
