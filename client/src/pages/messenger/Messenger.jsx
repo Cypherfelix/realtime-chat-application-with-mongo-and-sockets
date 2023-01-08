@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
 import Navbar from "../../components/navbar/Navbar";
+import Online from "../../components/online/Online";
 import "./messenger.scss";
 
 export const Messenger = () => {
@@ -47,7 +48,13 @@ export const Messenger = () => {
                     </div>
                 </div>
                 <div className="chatOnline">
-                    <div className="chatOnlineWrapper"></div>
+                    <ul className="chatOnlineWrapper">
+                        <Online />
+                        <Online />
+                        <Online />
+                        <Online />
+                        <Online />
+                    </ul>
                 </div>
             </div>
         </div>
