@@ -35,8 +35,8 @@ export default function ChatOnline({ onlineUsers, currentId, setCurrentChat }) {
   };
   return (
     <div className="chatOnline">
-      {friends.map((o) => (
-        <div className="chatOnlineFriend" onClick={() => handleClick(o)}>
+      {friends.map((o, index) => (
+        <div key={index} className="chatOnlineFriend" onClick={() => handleClick(o)} >
           <div className="chatOnlineImgContainer">
             <img
               className="chatOnlineImg"

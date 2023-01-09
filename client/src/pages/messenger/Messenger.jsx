@@ -47,7 +47,6 @@ export const Messenger = () => {
         });
     }, [user]);
 
-    console.log(onlineUsers);
     useEffect(() => {
         const getConversations = async () => {
             try {
@@ -127,8 +126,8 @@ export const Messenger = () => {
                 <div className="chatMenu">
                     <div className="chatMenuWrapper">
                         <input placeholder="Search for friends" className="chatMenuInput" />
-                        {conversations.map((c) => (
-                            <div id={c._id} onClick={async () => {
+                        {conversations.map((c, index) => (
+                            <div key={index} onClick={async () => {
                                 setCurrentChat(c);
                                 await getOtherUsers(c);
                             }}>
@@ -142,8 +141,8 @@ export const Messenger = () => {
                         {currentChat ? (
                             <>
                                 <div className="chatBoxTop">
-                                    {messages.map((m) => (
-                                        <div id={m._id} ref={scrollRef}>
+                                    {messages.map((m, index) => (
+                                        <div key={index} ref={scrollRef}>
                                             <Message message={m} own={m.sender === user._id} user={user} otherUser={otherUser} />
                                         </div>
 
