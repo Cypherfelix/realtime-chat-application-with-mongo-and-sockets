@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
 import Navbar from "../../components/navbar/Navbar";
-import Online from "../../components/online/Online";
+import ChatOnline from "../../components/chatOnline/ChatOnline";
 import { AuthContext } from "../../context/auth/AuthContext"
 import "./messenger.scss";
 import { io } from "socket.io-client";
@@ -170,11 +170,11 @@ export const Messenger = () => {
                 </div>
                 <div className="chatOnline">
                     <div className="chatOnlineWrapper">
-                        <Online />
-                        <Online />
-                        <Online />
-                        <Online />
-                        <Online />
+                        <ChatOnline
+                            onlineUsers={onlineUsers}
+                            currentId={user._id}
+                            setCurrentChat={setCurrentChat}
+                        />
                     </div>
                 </div>
             </div>
