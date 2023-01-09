@@ -6,13 +6,37 @@ import New from "./pages/new/New";
 import { productInputs, userInputs } from "./formSource"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./style/dark.scss";
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { DarkModeContext } from "./context/darkModeContext";
 import { Messenger } from "./pages/messenger/Messenger";
+import { AuthContext } from "./context/auth/AuthContext";
+import { loginCall } from "../src/apiCalls";
 function App() {
-
+  console.log(process.env.REACT_APP_BACKEND_URL);
   const { darkMode } = useContext(DarkModeContext)
+  const { isFetching, dispatch, user } = useContext(AuthContext);
+
+  let email = "jamesdoe@example.com";
+  let password = "12345678";
+
+  useEffect(() => {
+    const login = () => {
+      loginCall(
+        { email: email, password: password },
+        dispatch
+      );
+    };
+
+    if (!user) {
+      login();
+    }
+
+  }, [email, password, dispatch, user]);
+
+
   return (
+
+
     <div className={darkMode ? "app dark" : "app"}>
       <BrowserRouter>
         <Routes>
