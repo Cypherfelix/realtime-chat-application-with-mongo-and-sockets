@@ -30,7 +30,7 @@ export const Messenger = () => {
             }
         };
         getConversations();
-    }, []);
+    }, [API, user._id]);
 
     useEffect(() => {
         const getMessages = async () => {
