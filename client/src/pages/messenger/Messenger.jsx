@@ -8,6 +8,7 @@ import Navbar from "../../components/navbar/Navbar";
 import Online from "../../components/online/Online";
 import { AuthContext } from "../../context/auth/AuthContext"
 import "./messenger.scss";
+import { io } from "socket.io-client";
 
 export const Messenger = () => {
     const API = process.env.REACT_APP_BACKEND_URL;
@@ -17,9 +18,36 @@ export const Messenger = () => {
     const { user } = useContext(AuthContext);
     const [otherUser, setOtherUser] = useState(null);
     const [newMessage, setNewMessage] = useState("");
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    const [onlineUsers, setOnlineUsers] = useState([])
     const scrollRef = useRef();
+    const socket = useRef();
 
+    useEffect(() => {
+        socket.current = io("ws://localhost:8900");
+        socket.current.on("getMessage", (data) => {
+            setArrivalMessage({
+                sender: data.senderId,
+                text: data.text,
+                createdAt: Date.now(),
+            });
+        });
+    }, []);
 
+    useEffect(() => {
+        arrivalMessage &&
+            currentChat?.members.includes(arrivalMessage.sender) &&
+            setMessages((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, currentChat]);
+
+    useEffect(() => {
+        socket.current.emit("addUser", user._id);
+        socket.current.on("getUsers", (users) => {
+            setOnlineUsers(users);
+        });
+    }, [user]);
+
+    console.log(onlineUsers);
     useEffect(() => {
         const getConversations = async () => {
             try {
@@ -64,6 +92,16 @@ export const Messenger = () => {
             text: newMessage,
             conversationId: currentChat._id,
         };
+
+        const receiverId = currentChat.members.find(
+            (member) => member !== user._id
+        );
+
+        socket.current.emit("sendMessage", {
+            senderId: user._id,
+            receiverId,
+            text: newMessage,
+        });
 
         try {
             const res = await axios.post(`${API}/messages`, message);
@@ -131,13 +169,13 @@ export const Messenger = () => {
                     </div>
                 </div>
                 <div className="chatOnline">
-                    <ul className="chatOnlineWrapper">
+                    <div className="chatOnlineWrapper">
                         <Online />
                         <Online />
                         <Online />
                         <Online />
                         <Online />
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
