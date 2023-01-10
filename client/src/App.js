@@ -6,32 +6,14 @@ import New from "./pages/new/New";
 import { productInputs, userInputs } from "./formSource"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./style/dark.scss";
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { DarkModeContext } from "./context/darkModeContext";
 import { Messenger } from "./pages/messenger/Messenger";
 import { AuthContext } from "./context/auth/AuthContext";
-import { loginCall } from "../src/apiCalls";
+import Register from "./pages/register/Register";
 function App() {
   const { darkMode } = useContext(DarkModeContext)
-  const { isFetching, dispatch, user } = useContext(AuthContext);
-
-  let email = "jamesdoe@example.com";
-  let password = "12345678";
-
-  useEffect(() => {
-    const login = () => {
-      loginCall(
-        { email: email, password: password },
-        dispatch
-      );
-    };
-
-    if (!user) {
-      login();
-    }
-
-  }, [email, password, dispatch, user]);
-
+  const { user } = useContext(AuthContext);
 
   return (
 
@@ -40,8 +22,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/">
-            <Route index element={<Home />} />
+            <Route index element={user ? <Home /> : <Login />} />
             <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
             <Route path="users">
               <Route index element={<List />} />
               <Route path=":userId" element={<Single />} />
